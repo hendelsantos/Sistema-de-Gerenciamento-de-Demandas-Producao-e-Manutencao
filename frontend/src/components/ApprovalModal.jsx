@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 
-const ApprovalModal = ({ isOpen, onClose, onConfirm, title, type }) => {
+const ApprovalModal = ({ isOpen, onClose, onConfirm, title, type, showClassification }) => {
     const [justificativa, setJustificativa] = useState('');
+    const [classificacao, setClassificacao] = useState('');
 
     if (!isOpen) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onConfirm(justificativa);
+        onConfirm(justificativa, classificacao);
         setJustificativa('');
+        setClassificacao('');
     };
 
     return (
@@ -26,6 +28,23 @@ const ApprovalModal = ({ isOpen, onClose, onConfirm, title, type }) => {
                             required={type === 'reject'}
                         />
                     </div>
+                    {showClassification && (
+                        <div className="mb-4">
+                            <label className="block text-gray-700 mb-2">Classificação (GUT)</label>
+                            <select
+                                value={classificacao}
+                                onChange={(e) => setClassificacao(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-md"
+                                required
+                            >
+                                <option value="">Selecione...</option>
+                                <option value="H">H - Hoje</option>
+                                <option value="A">A - Amanhã</option>
+                                <option value="T">T - Temporário</option>
+                                <option value="M">M - Manutenção Programada</option>
+                            </select>
+                        </div>
+                    )}
                     <div className="flex justify-end gap-2">
                         <button
                             type="button"

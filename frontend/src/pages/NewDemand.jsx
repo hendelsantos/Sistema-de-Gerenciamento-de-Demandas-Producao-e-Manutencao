@@ -10,7 +10,7 @@ const NewDemand = () => {
         processo: '',
         equipamento: '',
         gut: 1,
-        photos: [] // Placeholder for photo URLs
+        photos: []
     });
     const [loading, setLoading] = useState(false);
 
@@ -19,11 +19,38 @@ const NewDemand = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setFormData(prev => ({ ...prev, photos: [...prev.photos, ...files] }));
+    };
+
+    const removePhoto = (index) => {
+        setFormData(prev => ({
+            ...prev,
+            photos: prev.photos.filter((_, i) => i !== index)
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await api.post('/demands', formData);
+            const data = new FormData();
+            data.append('titulo', formData.titulo);
+            data.append('problema', formData.problema);
+            data.append('processo', formData.processo);
+            data.append('equipamento', formData.equipamento);
+            data.append('gut', formData.gut);
+
+            formData.photos.forEach(file => {
+                data.append('photos', file);
+            });
+
+            await api.post('/demands', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             navigate('/');
         } catch (error) {
             console.error('Erro ao criar demanda:', error);
@@ -108,6 +135,43 @@ const NewDemand = () => {
                                 (1-5)
                             </div>
                         </div>
+                    </div>
+
+                    <div className="col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Fotos (Opcional)</label>
+                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-primary transition-colors cursor-pointer relative">
+                            <div className="space-y-1 text-center">
+                                <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <div className="flex text-sm text-gray-600 justify-center">
+                                    <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary-hover focus-within:outline-none">
+                                        <span>Upload de arquivos</span>
+                                        <input id="file-upload" name="photos" type="file" multiple className="sr-only" onChange={handleFileChange} accept="image/*" />
+                                    </label>
+                                    <p className="pl-1">ou arraste e solte</p>
+                                </div>
+                                <p className="text-xs text-gray-500">PNG, JPG, GIF até 10MB</p>
+                            </div>
+                        </div>
+                        {formData.photos && formData.photos.length > 0 && (
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {Array.from(formData.photos).map((file, index) => (
+                                    <div key={index} className="relative group">
+                                        <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-200">
+                                            <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => removePhoto(index)}
+                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 

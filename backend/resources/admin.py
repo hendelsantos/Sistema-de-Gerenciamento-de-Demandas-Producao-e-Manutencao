@@ -14,6 +14,26 @@ def get_users():
     users = User.query.all()
     return jsonify([u.to_dict() for u in users]), 200
 
+@admin_bp.route('/users', methods=['POST'])
+@jwt_required()
+def create_user():
+    data = request.get_json()
+    
+    if User.query.filter_by(email=data.get('email')).first():
+        return jsonify({'message': 'Email already exists'}), 400
+        
+    user = User(
+        nome=data.get('nome'),
+        email=data.get('email'),
+        role=data.get('role', 'VISUALIZADOR')
+    )
+    user.set_password(data.get('password'))
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    return jsonify(user.to_dict()), 201
+
 @admin_bp.route('/users/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_user_role(id):
@@ -47,6 +67,8 @@ def update_config():
     data = request.get_json()
     if 'email_aprovador_1' in data: config.email_aprovador_1 = data['email_aprovador_1']
     if 'email_aprovador_2' in data: config.email_aprovador_2 = data['email_aprovador_2']
+    if 'nome_aprovador_1' in data: config.nome_aprovador_1 = data['nome_aprovador_1']
+    if 'nome_aprovador_2' in data: config.nome_aprovador_2 = data['nome_aprovador_2']
     if 'email_executor_default' in data: config.email_executor_default = data['email_executor_default']
     
     db.session.commit()

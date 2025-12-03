@@ -23,6 +23,7 @@ class Demand(db.Model):
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     status = db.Column(db.Enum(DemandStatus), default=DemandStatus.PENDENTE_APROVACAO_1, nullable=False)
+    classificacao = db.Column(db.Enum('H', 'A', 'T', 'M', name='classificacao_enum'), nullable=True)
 
     creator = db.relationship('User', backref='demands')
     photos = db.relationship('Photo', backref='demand', lazy=True)
@@ -42,5 +43,6 @@ class Demand(db.Model):
             'created_by': self.created_by,
             'creator_name': self.creator.nome if self.creator else None,
             'status': self.status.value,
+            'classificacao': self.classificacao,
             'photos': [p.to_dict() for p in self.photos]
         }

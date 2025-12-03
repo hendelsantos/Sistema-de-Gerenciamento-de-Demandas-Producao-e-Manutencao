@@ -13,8 +13,18 @@ demands_bp = Blueprint('demands', __name__)
 @jwt_required()
 def create_demand():
     print("[DEBUG] Starting create_demand")
-    data = request.get_json()
-    print(f"[DEBUG] Received data: {data}")
+    
+    # Check if it's a multipart request (file upload)
+    if request.content_type and 'multipart/form-data' in request.content_type:
+        data = request.form
+        files = request.files.getlist('photos')
+        print(f"[DEBUG] Received multipart data: {data}")
+        print(f"[DEBUG] Received files: {[f.filename for f in files]}")
+    else:
+        data = request.get_json()
+        files = []
+        print(f"[DEBUG] Received json data: {data}")
+
     current_user_id = int(get_jwt_identity())
     print(f"[DEBUG] Current user ID: {current_user_id}")
     
@@ -31,7 +41,6 @@ def create_demand():
         print(f"[DEBUG] Demand object created: {demand.titulo}")
         
         db.session.add(demand)
-        print("[DEBUG] Demand added to session")
         db.session.flush() # Get ID
         print(f"[DEBUG] Demand flushed, ID: {demand.id}")
         
@@ -41,20 +50,40 @@ def create_demand():
             status=DemandStatus.PENDENTE_APROVACAO_1
         )
         db.session.add(history)
-        print("[DEBUG] History added")
         
-        # Handle photos (assuming URLs are passed for now, upload logic separate)
-        if 'photos' in data:
-            for photo_url in data['photos']:
-                photo = Photo(demand_id=demand.id, filename='todo', url=photo_url)
-                db.session.add(photo)
-        print("[DEBUG] Photos processed")
+        # Handle file uploads
+        import os
+        from werkzeug.utils import secure_filename
+        
+        UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
+        if not os.path.exists(UPLOAD_FOLDER):
+            os.makedirs(UPLOAD_FOLDER)
+            
+        for file in files:
+            if file and file.filename:
+                filename = secure_filename(file.filename)
+                # Add timestamp to filename to avoid collisions
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                unique_filename = f"{timestamp}_{filename}"
+                file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+                file.save(file_path)
                 
+                # Create Photo record
+                # URL should be relative to static folder
+                photo_url = f"/static/uploads/{unique_filename}"
+                photo = Photo(demand_id=demand.id, filename=unique_filename, url=photo_url)
+                db.session.add(photo)
+                print(f"[DEBUG] Photo saved: {unique_filename}")
+
+        # Handle existing photo URLs (if any passed via JSON)
+        if 'photos' in data and not files:
+             # This part might need adjustment if we want to support both, 
+             # but for now let's assume JSON photos are just URLs
+             # If data is from form, 'photos' might be the file list key, handled above
+             pass
+
         db.session.commit()
         print("[DEBUG] Session committed successfully")
-        
-        # Email notifications will be configured later
-        print(f"[INFO] Demanda criada: {demand.id} - {demand.titulo}")
         
         return jsonify(demand.to_dict()), 201
     except Exception as e:
@@ -67,8 +96,32 @@ def create_demand():
 @demands_bp.route('', methods=['GET'])
 @jwt_required()
 def get_demands():
-    demands = Demand.query.order_by(Demand.data_criacao.desc()).all()
-    return jsonify([d.to_dict() for d in demands]), 200
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    status_filter = request.args.get('status')
+    
+    query = Demand.query
+    
+    if status_filter:
+        statuses = status_filter.split(',')
+        query = query.filter(Demand.status.in_(statuses))
+        
+    demands = query.order_by(Demand.data_criacao.desc()).all()
+    demands_list = [d.to_dict() for d in demands]
+    
+    if request.args.get('page'):
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_items = demands_list[start:end]
+        
+        return jsonify({
+            'demands': paginated_items,
+            'total': len(demands_list),
+            'pages': (len(demands_list) + per_page - 1) // per_page,
+            'current_page': page
+        }), 200
+        
+    return jsonify(demands_list), 200
 
 @demands_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()

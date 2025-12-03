@@ -8,11 +8,11 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import NewDemand from './pages/NewDemand';
 import DemandDetails from './pages/DemandDetails';
+import KanbanBoard from './pages/KanbanBoard';
 import Admin from './pages/Admin';
 
-// Placeholder components
-const Approvals = () => <div className="p-6"><h1 className="text-2xl font-bold">Aprovações</h1></div>;
-const Executions = () => <div className="p-6"><h1 className="text-2xl font-bold">Execução</h1></div>;
+import Approvals from './pages/Approvals';
+import Executions from './pages/Executions';
 
 const PrivateRoute = ({ children }) => {
   const { signed, loading } = useAuth();
@@ -26,7 +26,7 @@ const PrivateRoute = ({ children }) => {
   }
 
   return (
-    <div className="flex min-h-screen bg-surface-muted font-sans">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-300">
       <Sidebar />
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         <Navbar />
@@ -38,22 +38,27 @@ const PrivateRoute = ({ children }) => {
   );
 };
 
+import { ThemeProvider } from './context/ThemeContext';
+
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
 
-          <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/demands/new" element={<PrivateRoute><NewDemand /></PrivateRoute>} />
-          <Route path="/demands/:id" element={<PrivateRoute><DemandDetails /></PrivateRoute>} />
-          <Route path="/approvals" element={<PrivateRoute><Approvals /></PrivateRoute>} />
-          <Route path="/executions" element={<PrivateRoute><Executions /></PrivateRoute>} />
-          <Route path="/admin" element={<PrivateRoute><Admin /></PrivateRoute>} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+            <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/demands/new" element={<PrivateRoute><NewDemand /></PrivateRoute>} />
+            <Route path="/demands/:id" element={<PrivateRoute><DemandDetails /></PrivateRoute>} />
+            <Route path="/kanban" element={<PrivateRoute><KanbanBoard /></PrivateRoute>} />
+            <Route path="/approvals" element={<PrivateRoute><Approvals /></PrivateRoute>} />
+            <Route path="/executions" element={<PrivateRoute><Executions /></PrivateRoute>} />
+            <Route path="/admin" element={<PrivateRoute><Admin /></PrivateRoute>} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

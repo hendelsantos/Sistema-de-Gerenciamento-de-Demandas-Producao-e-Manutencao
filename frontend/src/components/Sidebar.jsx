@@ -5,9 +5,9 @@ import { useAuth } from '../context/AuthContext';
 const SidebarItem = ({ to, icon, label, active }) => (
     <Link
         to={to}
-        className={`flex items-center px-6 py-3 text-sm font-medium transition-colors duration-200 ${active
-                ? 'bg-primary text-white border-r-4 border-white'
-                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+        className={`flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 rounded-r-full mr-4 ${active
+            ? 'bg-primary/10 text-primary border-l-4 border-primary dark:bg-primary/20 dark:text-white'
+            : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-white'
             }`}
     >
         <span className="mr-3">{icon}</span>
@@ -22,12 +22,12 @@ const Sidebar = () => {
     const isActive = (path) => location.pathname === path;
 
     return (
-        <aside className="w-64 bg-gray-900 text-white min-h-screen flex flex-col shadow-xl z-20">
-            <div className="h-16 flex items-center px-6 bg-gray-900 border-b border-gray-800">
-                <h2 className="text-xl font-bold tracking-wider text-white">DEMANDAS</h2>
+        <aside className="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 min-h-screen flex flex-col transition-colors duration-300 z-20">
+            <div className="h-20 flex items-center px-8 border-b border-gray-200 dark:border-gray-800">
+                <h2 className="text-xl font-bold tracking-wider text-primary dark:text-white">DEMANDAS</h2>
             </div>
 
-            <nav className="flex-1 py-6 space-y-1">
+            <nav className="flex-1 py-6 space-y-2 px-4">
                 <SidebarItem
                     to="/"
                     active={isActive('/')}
@@ -39,6 +39,13 @@ const Sidebar = () => {
                     active={isActive('/demands/new')}
                     label="Nova Demanda"
                     icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>}
+                />
+
+                <SidebarItem
+                    to="/kanban"
+                    active={isActive('/kanban')}
+                    label="Quadro Kanban"
+                    icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>}
                 />
 
                 {['APROVADOR_1', 'APROVADOR_2', 'ADMIN'].includes(user?.role) && (
@@ -69,14 +76,14 @@ const Sidebar = () => {
                 )}
             </nav>
 
-            <div className="p-4 border-t border-gray-800">
+            <div className="p-6 border-t border-gray-200 dark:border-gray-800">
                 <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center text-white font-bold shadow-lg">
                         {user?.nome?.charAt(0) || 'U'}
                     </div>
                     <div className="ml-3">
-                        <p className="text-sm font-medium text-white">{user?.nome}</p>
-                        <p className="text-xs text-gray-400">{user?.role}</p>
+                        <p className="text-sm font-semibold text-gray-800 dark:text-white">{user?.nome}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{user?.role}</p>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,8 @@ class AppConfig(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email_aprovador_1 = db.Column(db.String(120), nullable=True)
     email_aprovador_2 = db.Column(db.String(120), nullable=True)
+    nome_aprovador_1 = db.Column(db.String(100), default="Aprovador Nível 1")
+    nome_aprovador_2 = db.Column(db.String(100), default="Aprovador Nível 2")
     email_executor_default = db.Column(db.String(120), nullable=True)
 
     def to_dict(self):
@@ -13,5 +15,7 @@ class AppConfig(db.Model):
             'id': self.id,
             'email_aprovador_1': self.email_aprovador_1,
             'email_aprovador_2': self.email_aprovador_2,
+            'nome_aprovador_1': self.nome_aprovador_1,
+            'nome_aprovador_2': self.nome_aprovador_2,
             'email_executor_default': self.email_executor_default
         }

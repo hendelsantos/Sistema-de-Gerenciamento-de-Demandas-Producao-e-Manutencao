@@ -98,6 +98,25 @@ const DemandDetails = () => {
                     </div>
                 </div>
 
+                {/* Photos Gallery */}
+                {demand.photos && demand.photos.length > 0 && (
+                    <div className="mb-8">
+                        <h3 className="text-gray-500 font-semibold text-sm uppercase mb-3">Fotos Anexadas</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {demand.photos.map((photo) => (
+                                <div key={photo.id} className="relative group aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
+                                    <img
+                                        src={`http://127.0.0.1:5000${photo.url}`}
+                                        alt="Evidência"
+                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                        onClick={() => window.open(`http://127.0.0.1:5000${photo.url}`, '_blank')}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex gap-4 mt-8 border-t pt-6">
                     {canApprove1 && (
@@ -125,9 +144,10 @@ const DemandDetails = () => {
             <ApprovalModal
                 isOpen={modalOpen && ['approve_1', 'reject_1', 'approve_2', 'reject_2'].includes(modalType)}
                 onClose={() => setModalOpen(false)}
-                onConfirm={(justificativa) => handleAction(modalType, { justificativa })}
+                onConfirm={(justificativa, classificacao) => handleAction(modalType, { justificativa, classificacao })}
                 title={modalType?.includes('approve') ? 'Aprovar Demanda' : 'Rejeitar Demanda'}
                 type={modalType?.includes('approve') ? 'approve' : 'reject'}
+                showClassification={modalType === 'approve_2'}
             />
 
             <ExecutionModal

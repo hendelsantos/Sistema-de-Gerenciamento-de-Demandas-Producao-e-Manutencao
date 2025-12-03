@@ -5,6 +5,8 @@ const ConfigForm = () => {
     const [config, setConfig] = useState({
         email_aprovador_1: '',
         email_aprovador_2: '',
+        nome_aprovador_1: '',
+        nome_aprovador_2: '',
         email_executor_default: ''
     });
 
@@ -42,11 +44,31 @@ const ConfigForm = () => {
             <h3 className="text-lg font-bold mb-4">Configuração de E-mails</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
+                    <label className="block text-gray-700 font-bold mb-2">Nome Aprovador Nível 1</label>
+                    <input
+                        type="text"
+                        name="nome_aprovador_1"
+                        value={config.nome_aprovador_1 || ''}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border rounded-md"
+                    />
+                </div>
+                <div>
                     <label className="block text-gray-700 font-bold mb-2">Email Aprovador Nível 1</label>
                     <input
                         type="email"
                         name="email_aprovador_1"
                         value={config.email_aprovador_1 || ''}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border rounded-md"
+                    />
+                </div>
+                <div>
+                    <label className="block text-gray-700 font-bold mb-2">Nome Aprovador Nível 2</label>
+                    <input
+                        type="text"
+                        name="nome_aprovador_2"
+                        value={config.nome_aprovador_2 || ''}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded-md"
                     />

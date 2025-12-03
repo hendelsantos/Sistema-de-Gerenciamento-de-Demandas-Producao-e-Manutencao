@@ -80,6 +80,10 @@ def approve_level_2(id):
     if demand.status != DemandStatus.PENDENTE_APROVACAO_2:
         return jsonify({'message': 'Invalid status for approval'}), 400
         
+    classificacao = data.get('classificacao')
+    if not classificacao:
+        return jsonify({'message': 'Classificacao is required'}), 400
+        
     approval = Approval(
         demand_id=id,
         aprovador_id=current_user_id,
@@ -89,6 +93,7 @@ def approve_level_2(id):
     )
     
     demand.status = DemandStatus.AGUARDANDO_EXECUCAO
+    demand.classificacao = classificacao
     history = StatusHistory(demand_id=id, status=DemandStatus.AGUARDANDO_EXECUCAO)
     
     db.session.add(approval)

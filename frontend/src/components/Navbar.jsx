@@ -1,17 +1,19 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
 
     return (
-        <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
-            <h1 className="text-xl font-bold text-gray-800 tracking-tight">Sistema de Demandas</h1>
+        <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+            <h1 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Sistema de Demandas</h1>
             <div className="flex items-center gap-6">
                 <div className="flex items-center gap-3">
+                    <ThemeToggle />
                     <div className="text-right hidden sm:block">
-                        <p className="text-sm font-medium text-gray-900">{user?.nome}</p>
-                        <p className="text-xs text-gray-500">{user?.role}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.nome}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{user?.role}</p>
                     </div>
                 </div>
                 <button
