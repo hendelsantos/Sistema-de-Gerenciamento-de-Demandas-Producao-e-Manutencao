@@ -21,10 +21,14 @@ def create_user():
     
     if User.query.filter_by(email=data.get('email')).first():
         return jsonify({'message': 'Email already exists'}), 400
+
+    if User.query.filter_by(hmc=data.get('hmc')).first():
+        return jsonify({'message': 'HMC already exists'}), 400
         
     user = User(
         nome=data.get('nome'),
         email=data.get('email'),
+        hmc=data.get('hmc'),
         role=data.get('role', 'VISUALIZADOR')
     )
     user.set_password(data.get('password'))

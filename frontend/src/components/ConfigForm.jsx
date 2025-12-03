@@ -40,57 +40,57 @@ const ConfigForm = () => {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-bold mb-4">Configuração de E-mails</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-gray-700 font-bold mb-2">Nome Aprovador Nível 1</label>
+                    <label className="block text-gray-900 dark:text-gray-200 font-bold mb-2">Nome Aprovador Nível 1</label>
                     <input
                         type="text"
                         name="nome_aprovador_1"
                         value={config.nome_aprovador_1 || ''}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md"
+                        className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 font-bold mb-2">Email Aprovador Nível 1</label>
+                    <label className="block text-gray-900 dark:text-gray-200 font-bold mb-2">Email Aprovador Nível 1</label>
                     <input
                         type="email"
                         name="email_aprovador_1"
                         value={config.email_aprovador_1 || ''}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md"
+                        className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 font-bold mb-2">Nome Aprovador Nível 2</label>
+                    <label className="block text-gray-900 dark:text-gray-200 font-bold mb-2">Nome Aprovador Nível 2</label>
                     <input
                         type="text"
                         name="nome_aprovador_2"
                         value={config.nome_aprovador_2 || ''}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md"
+                        className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 font-bold mb-2">Email Aprovador Nível 2</label>
+                    <label className="block text-gray-900 dark:text-gray-200 font-bold mb-2">Email Aprovador Nível 2</label>
                     <input
                         type="email"
                         name="email_aprovador_2"
                         value={config.email_aprovador_2 || ''}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md"
+                        className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700 font-bold mb-2">Email Executor Padrão</label>
+                    <label className="block text-gray-900 dark:text-gray-200 font-bold mb-2">Email Executor Padrão</label>
                     <input
                         type="email"
                         name="email_executor_default"
                         value={config.email_executor_default || ''}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md"
+                        className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                 </div>
                 <button

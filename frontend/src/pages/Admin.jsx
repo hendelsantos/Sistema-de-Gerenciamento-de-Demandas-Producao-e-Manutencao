@@ -13,7 +13,7 @@ const Admin = () => {
                     <UserTable />
                 </div>
                 <div>
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-300">Configurações do Sistema</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-300">Configurações do Sistema</h2>
                     <ConfigForm />
                 </div>
             </div>

@@ -16,6 +16,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    hmc = db.Column(db.String(20), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     role = db.Column(db.Enum(UserRole), default=UserRole.VISUALIZADOR, nullable=False)
     ativo = db.Column(db.Boolean, default=True)
@@ -31,6 +32,7 @@ class User(db.Model):
             'id': self.id,
             'nome': self.nome,
             'email': self.email,
+            'hmc': self.hmc,
             'role': self.role.value,
             'ativo': self.ativo
         }

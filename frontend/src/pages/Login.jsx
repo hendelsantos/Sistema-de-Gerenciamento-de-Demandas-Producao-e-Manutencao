@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [hmc, setHmc] = useState('');
     const [password, setPassword] = useState('');
     const { login, guestLogin } = useAuth();
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await login(email, password);
+            await login(hmc, password);
             navigate('/');
         } catch (err) {
             setError('Falha no login. Verifique suas credenciais.');
@@ -59,13 +59,13 @@ const Login = () => {
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">HMC (Registro)</label>
                                 <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    type="text"
+                                    value={hmc}
+                                    onChange={(e) => setHmc(e.target.value)}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none text-gray-900"
-                                    placeholder="seu@email.com"
+                                    placeholder="Ex: 37100655"
                                     required
                                 />
                             </div>

@@ -38,13 +38,13 @@ const UserTable = () => {
         }
     };
 
-    const [newUser, setNewUser] = useState({ nome: '', email: '', password: '', role: 'VISUALIZADOR' });
+    const [newUser, setNewUser] = useState({ nome: '', email: '', hmc: '', password: '', role: 'VISUALIZADOR' });
 
     const handleCreateUser = async (e) => {
         e.preventDefault();
         try {
             await api.post('/admin/users', newUser);
-            setNewUser({ nome: '', email: '', password: '', role: 'VISUALIZADOR' });
+            setNewUser({ nome: '', email: '', hmc: '', password: '', role: 'VISUALIZADOR' });
             fetchUsers();
             alert('Usuário criado com sucesso!');
         } catch (error) {
@@ -65,6 +65,16 @@ const UserTable = () => {
                             type="text"
                             value={newUser.nome}
                             onChange={(e) => setNewUser({ ...newUser, nome: e.target.value })}
+                            className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-primary focus:border-primary"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">HMC</label>
+                        <input
+                            type="text"
+                            value={newUser.hmc}
+                            onChange={(e) => setNewUser({ ...newUser, hmc: e.target.value })}
                             className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-primary focus:border-primary"
                             required
                         />
@@ -117,6 +127,7 @@ const UserTable = () => {
                     <thead className="bg-gray-50 dark:bg-gray-900/50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nome</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">HMC</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
@@ -126,6 +137,7 @@ const UserTable = () => {
                         {users.map((user) => (
                             <tr key={user.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{user.nome}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{user.hmc}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{user.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <select
