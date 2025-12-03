@@ -63,70 +63,70 @@ const NewDemand = () => {
 
     return (
         <div className="max-w-3xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6 text-gray-900">Nova Demanda</h1>
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-soft space-y-6 border border-gray-100">
+            <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Nova Demanda</h1>
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-soft space-y-6 border border-gray-100 dark:border-gray-700">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Título</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Título</label>
                         <input
                             type="text"
                             name="titulo"
                             value={formData.titulo}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             placeholder="Resumo do problema"
                             required
                         />
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Problema Detalhado</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Problema Detalhado</label>
                         <textarea
                             name="problema"
                             value={formData.problema}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none h-32 resize-none"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none h-32 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             placeholder="Descreva o problema em detalhes..."
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Processo</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Processo</label>
                         <input
                             type="text"
                             name="processo"
                             value={formData.processo}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             placeholder="Ex: Cabine Pintura"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Equipamento</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Equipamento</label>
                         <input
                             type="text"
                             name="equipamento"
                             value={formData.equipamento}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none"
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             placeholder="Ex: R12"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Prioridade (GUT)</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prioridade (GUT)</label>
                         <div className="relative">
                             <input
                                 type="number"
                                 name="gut"
                                 value={formData.gut}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                                 min="1"
                                 max="5"
                                 required
@@ -138,14 +138,14 @@ const NewDemand = () => {
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Fotos (Opcional)</label>
-                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-primary transition-colors cursor-pointer relative">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fotos (Opcional)</label>
+                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg hover:border-primary transition-colors cursor-pointer relative bg-gray-50 dark:bg-gray-700/50">
                             <div className="space-y-1 text-center">
                                 <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
-                                <div className="flex text-sm text-gray-600 justify-center">
-                                    <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary-hover focus-within:outline-none">
+                                <div className="flex text-sm text-gray-600 dark:text-gray-400 justify-center">
+                                    <label htmlFor="file-upload" className="relative cursor-pointer bg-transparent rounded-md font-medium text-primary hover:text-primary-hover focus-within:outline-none">
                                         <span>Upload de arquivos</span>
                                         <input id="file-upload" name="photos" type="file" multiple className="sr-only" onChange={handleFileChange} accept="image/*" />
                                     </label>
@@ -175,11 +175,11 @@ const NewDemand = () => {
                     </div>
                 </div>
 
-                <div className="pt-6 border-t border-gray-100 flex justify-end gap-4">
+                <div className="pt-6 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-4">
                     <button
                         type="button"
                         onClick={() => navigate('/')}
-                        className="px-6 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                        className="px-6 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg font-medium transition-colors"
                     >
                         Cancelar
                     </button>

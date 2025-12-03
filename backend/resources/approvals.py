@@ -19,6 +19,11 @@ def approve_level_1(id):
     if demand.status != DemandStatus.PENDENTE_APROVACAO_1:
         return jsonify({'message': 'Invalid status for approval'}), 400
         
+    # Allow GUT revision
+    new_gut = data.get('gut')
+    if new_gut:
+        demand.gut = new_gut
+
     approval = Approval(
         demand_id=id,
         aprovador_id=current_user_id,

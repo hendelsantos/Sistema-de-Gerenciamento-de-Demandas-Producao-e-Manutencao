@@ -10,6 +10,7 @@ import NewDemand from './pages/NewDemand';
 import DemandDetails from './pages/DemandDetails';
 import KanbanBoard from './pages/KanbanBoard';
 import Admin from './pages/Admin';
+import About from './pages/About';
 
 import Approvals from './pages/Approvals';
 import Executions from './pages/Executions';
@@ -54,6 +55,7 @@ function App() {
             <Route path="/kanban" element={<PrivateRoute><KanbanBoard /></PrivateRoute>} />
             <Route path="/approvals" element={<PrivateRoute><Approvals /></PrivateRoute>} />
             <Route path="/executions" element={<PrivateRoute><Executions /></PrivateRoute>} />
+            <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} />
             <Route path="/admin" element={<PrivateRoute><Admin /></PrivateRoute>} />
           </Routes>
         </Router>

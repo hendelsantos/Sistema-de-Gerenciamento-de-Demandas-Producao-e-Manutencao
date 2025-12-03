@@ -65,7 +65,16 @@ const DemandDetails = () => {
         <div className="p-6 max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-md p-6 mb-6">
                 <div className="flex justify-between items-start mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">{demand.titulo}</h1>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            title="Voltar"
+                        >
+                            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 className="text-3xl font-bold text-gray-800">{demand.titulo}</h1>
+                    </div>
                     <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
                         {demand.status}
                     </span>
@@ -144,10 +153,12 @@ const DemandDetails = () => {
             <ApprovalModal
                 isOpen={modalOpen && ['approve_1', 'reject_1', 'approve_2', 'reject_2'].includes(modalType)}
                 onClose={() => setModalOpen(false)}
-                onConfirm={(justificativa, classificacao) => handleAction(modalType, { justificativa, classificacao })}
+                onConfirm={(justificativa, classificacao, gut) => handleAction(modalType, { justificativa, classificacao, gut })}
                 title={modalType?.includes('approve') ? 'Aprovar Demanda' : 'Rejeitar Demanda'}
                 type={modalType?.includes('approve') ? 'approve' : 'reject'}
                 showClassification={modalType === 'approve_2'}
+                showGutRevision={modalType === 'approve_1'}
+                currentGut={demand?.gut}
             />
 
             <ExecutionModal

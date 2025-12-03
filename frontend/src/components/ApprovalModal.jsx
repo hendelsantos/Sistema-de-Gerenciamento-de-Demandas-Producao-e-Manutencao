@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 
-const ApprovalModal = ({ isOpen, onClose, onConfirm, title, type, showClassification }) => {
+const ApprovalModal = ({ isOpen, onClose, onConfirm, title, type, showClassification, showGutRevision, currentGut }) => {
     const [justificativa, setJustificativa] = useState('');
     const [classificacao, setClassificacao] = useState('');
+    const [gut, setGut] = useState(currentGut || '');
 
     if (!isOpen) return null;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onConfirm(justificativa, classificacao);
+        onConfirm(justificativa, classificacao, gut);
         setJustificativa('');
         setClassificacao('');
+        setGut('');
     };
 
     return (
@@ -43,6 +45,19 @@ const ApprovalModal = ({ isOpen, onClose, onConfirm, title, type, showClassifica
                                 <option value="T">T - Temporário</option>
                                 <option value="M">M - Manutenção Programada</option>
                             </select>
+                        </div>
+                    )}
+                    {showGutRevision && (
+                        <div className="mb-4">
+                            <label className="block text-gray-700 mb-2">Revisão G.U.T (Atual: {currentGut})</label>
+                            <input
+                                type="number"
+                                value={gut}
+                                onChange={(e) => setGut(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-md"
+                                min="1"
+                                max="5"
+                            />
                         </div>
                     )}
                     <div className="flex justify-end gap-2">

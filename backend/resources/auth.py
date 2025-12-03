@@ -38,6 +38,19 @@ def login():
         
     return jsonify({'message': 'Invalid credentials'}), 401
 
+@auth_bp.route('/guest-login', methods=['POST'])
+def guest_login():
+    user = User.query.filter_by(email='visualizador@hyundai.com').first()
+    
+    if not user:
+        return jsonify({'message': 'Guest user not found'}), 404
+        
+    access_token = create_access_token(identity=str(user.id))
+    return jsonify({
+        'access_token': access_token,
+        'user': user.to_dict()
+    }), 200
+
 @auth_bp.route('/me', methods=['GET'])
 @jwt_required()
 def me():

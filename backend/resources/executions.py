@@ -49,7 +49,11 @@ def finish_execution(id):
     execution.descricao_atividade = data.get('descricao_atividade')
     execution.observacao = data.get('observacao')
     execution.foto_final = data.get('foto_final')
-    execution.pm04_id = data.get('pm04_id')
+    
+    pm04_id = data.get('pm04_id')
+    if not pm04_id:
+        return jsonify({'message': 'PM04 ID is required (use N/A if not applicable)'}), 400
+    execution.pm04_id = pm04_id
     
     demand.status = DemandStatus.CONCLUIDO
     history = StatusHistory(demand_id=id, status=DemandStatus.CONCLUIDO)

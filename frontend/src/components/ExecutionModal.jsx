@@ -45,6 +45,7 @@ const ExecutionModal = ({ isOpen, onClose, onConfirm, title }) => {
                             onChange={handleChange}
                             className="w-full px-3 py-2 border rounded-md"
                             placeholder="Ex: 123456"
+                            required
                         />
                     </div>
                     <div className="mb-4">

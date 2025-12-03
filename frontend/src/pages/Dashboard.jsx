@@ -52,6 +52,7 @@ const Dashboard = () => {
                                 <th className="px-6 py-4">GUT</th>
                                 <th className="px-6 py-4">Foto</th>
                                 <th className="px-6 py-4">Data Emissão</th>
+                                <th className="px-6 py-4">Data Conclusão</th>
                                 <th className="px-6 py-4">Emitente</th>
                                 <th className="px-6 py-4">Status</th>
                                 <th className="px-6 py-4">Executor</th>
@@ -83,6 +84,7 @@ const Dashboard = () => {
                                         )}
                                     </td>
                                     <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(demand.data_criacao).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{demand.execution?.data_fim ? new Date(demand.execution.data_fim).toLocaleDateString() : '-'}</td>
                                     <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{demand.creator_name || '-'}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${demand.status === 'concluido' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900' :

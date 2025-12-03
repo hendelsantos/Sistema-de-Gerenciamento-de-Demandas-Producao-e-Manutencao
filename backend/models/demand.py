@@ -44,5 +44,6 @@ class Demand(db.Model):
             'creator_name': self.creator.nome if self.creator else None,
             'status': self.status.value,
             'classificacao': self.classificacao,
-            'photos': [p.to_dict() for p in self.photos]
+            'photos': [p.to_dict() for p in self.photos],
+            'execution': self.execution.to_dict() if self.execution else None
         }

@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useAuth();
+    const { login, guestLogin } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const [showSignUp, setShowSignUp] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,7 +42,7 @@ const Login = () => {
             </div>
 
             {/* Right Side - Login Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative">
                 <div className="w-full max-w-md">
                     <div className="bg-white p-10 rounded-2xl shadow-soft">
                         <div className="mb-8 text-center">
@@ -85,12 +87,81 @@ const Login = () => {
                             >
                                 {loading ? 'Entrando...' : 'Entrar'}
                             </button>
+
+                            <div className="relative flex py-2 items-center">
+                                <div className="flex-grow border-t border-gray-200"></div>
+                                <span className="flex-shrink-0 mx-4 text-gray-400 text-xs">OU</span>
+                                <div className="flex-grow border-t border-gray-200"></div>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    setLoading(true);
+                                    try {
+                                        await guestLogin();
+                                        navigate('/');
+                                    } catch (err) {
+                                        setError('Erro ao entrar como visitante.');
+                                    } finally {
+                                        setLoading(false);
+                                    }
+                                }}
+                                disabled={loading}
+                                className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                Entrar como Visitante
+                            </button>
                         </form>
+
+                        <div className="mt-6 text-center">
+                            <p className="text-sm text-gray-600">
+                                Não tem uma conta?{' '}
+                                <button
+                                    onClick={() => setShowSignUp(true)}
+                                    className="text-primary hover:text-primary-hover font-semibold hover:underline"
+                                >
+                                    Cadastre-se
+                                </button>
+                            </p>
+                        </div>
                     </div>
                     <p className="text-center text-gray-500 text-sm mt-8">
                         2025 Sistema de Demandas. Feito por Hendel / Ederson Supervisão: Gabriel Borges.
                     </p>
                 </div>
+
+                {/* Sign Up Modal */}
+                {showSignUp && (
+                    <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center p-8 z-20 rounded-2xl">
+                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 max-w-sm w-full text-center relative">
+                            <button
+                                onClick={() => setShowSignUp(false)}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Solicitar Acesso</h3>
+                            <p className="text-gray-600 mb-6">
+                                Para criar uma conta, envie um email solicitando acesso para:
+                            </p>
+                            <div className="bg-gray-50 p-4 rounded-lg text-sm text-gray-800 font-medium space-y-2 mb-6 break-words">
+                                <p>hendel.santos@hyundai-brasil.com</p>
+                                <p>ederson.moraes@hyundai-brasil.com</p>
+                            </div>
+                            <button
+                                onClick={() => setShowSignUp(false)}
+                                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-lg font-medium transition-colors"
+                            >
+                                Entendi
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

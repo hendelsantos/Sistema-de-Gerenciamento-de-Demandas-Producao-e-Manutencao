@@ -21,6 +21,8 @@ def create_app(config_class=DevelopmentConfig):
     from models.photo import Photo
     from models.status_history import StatusHistory
     from models.config import AppConfig
+    from models.bug_report import BugReport
+    from models.system_update import SystemUpdate
 
     # Register Blueprints
     from resources.auth import auth_bp
@@ -34,6 +36,12 @@ def create_app(config_class=DevelopmentConfig):
     app.register_blueprint(approvals_bp, url_prefix='/demands') # Approvals are sub-resources of demands
     app.register_blueprint(executions_bp, url_prefix='/demands') # Executions are sub-resources of demands
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    
+    from resources.bugs import bugs_bp
+    app.register_blueprint(bugs_bp, url_prefix='/bugs')
+    
+    from resources.updates import updates_bp
+    app.register_blueprint(updates_bp, url_prefix='/updates')
 
     return app
 
