@@ -31,7 +31,7 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    # Login now uses HMC instead of email
+    # Login agora usa HMC em vez de e-mail
     user = User.query.filter_by(hmc=data.get('hmc')).first()
     
     if user and user.check_password(data.get('password')):

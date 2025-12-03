@@ -61,7 +61,7 @@ def finish_execution(id):
     db.session.add(history)
     db.session.commit()
     
-    # Email notifications will be configured later
+    # Notificações por e-mail serão configuradas posteriormente
     print(f"[INFO] Demanda {demand.id} concluída")
     
     return jsonify({'message': 'Execution finished'}), 200

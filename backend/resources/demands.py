@@ -14,7 +14,7 @@ demands_bp = Blueprint('demands', __name__)
 def create_demand():
     print("[DEBUG] Starting create_demand")
     
-    # Check if it's a multipart request (file upload)
+    # Verificar se é uma requisição multipart (upload de arquivo)
     if request.content_type and 'multipart/form-data' in request.content_type:
         data = request.form
         files = request.files.getlist('photos')
@@ -41,17 +41,17 @@ def create_demand():
         print(f"[DEBUG] Demand object created: {demand.titulo}")
         
         db.session.add(demand)
-        db.session.flush() # Get ID
+        db.session.flush() # Obter ID
         print(f"[DEBUG] Demand flushed, ID: {demand.id}")
         
-        # Add initial history
+        # Adicionar histórico inicial
         history = StatusHistory(
             demand_id=demand.id,
             status=DemandStatus.PENDENTE_APROVACAO_1
         )
         db.session.add(history)
         
-        # Handle file uploads
+        # Lidar com uploads de arquivos
         import os
         from werkzeug.utils import secure_filename
         
@@ -62,24 +62,24 @@ def create_demand():
         for file in files:
             if file and file.filename:
                 filename = secure_filename(file.filename)
-                # Add timestamp to filename to avoid collisions
+                # Adicionar timestamp ao nome do arquivo para evitar colisões
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                 unique_filename = f"{timestamp}_{filename}"
                 file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
                 file.save(file_path)
                 
-                # Create Photo record
-                # URL should be relative to static folder
+                # Criar registro de Foto
+                # URL deve ser relativa à pasta static
                 photo_url = f"/static/uploads/{unique_filename}"
                 photo = Photo(demand_id=demand.id, filename=unique_filename, url=photo_url)
                 db.session.add(photo)
                 print(f"[DEBUG] Photo saved: {unique_filename}")
 
-        # Handle existing photo URLs (if any passed via JSON)
+        # Lidar com URLs de fotos existentes (se houver via JSON)
         if 'photos' in data and not files:
-             # This part might need adjustment if we want to support both, 
-             # but for now let's assume JSON photos are just URLs
-             # If data is from form, 'photos' might be the file list key, handled above
+             # Esta parte pode precisar de ajuste se quisermos suportar ambos, 
+             # mas por enquanto vamos assumir que fotos JSON são apenas URLs
+             # Se os dados forem do formulário, 'photos' pode ser a chave da lista de arquivos, tratada acima
              pass
 
         db.session.commit()
@@ -135,8 +135,8 @@ def update_demand(id):
     demand = Demand.query.get_or_404(id)
     data = request.get_json()
     
-    # Allow updates only if not yet approved? Or admin?
-    # For now, basic update
+    # Permitir atualizações apenas se ainda não aprovado? Ou admin?
+    # Por enquanto, atualização básica
     if 'titulo' in data: demand.titulo = data['titulo']
     if 'problema' in data: demand.problema = data['problema']
     

@@ -19,7 +19,7 @@ def approve_level_1(id):
     if demand.status != DemandStatus.PENDENTE_APROVACAO_1:
         return jsonify({'message': 'Invalid status for approval'}), 400
         
-    # Allow GUT revision
+    # Permitir revisão do GUT
     new_gut = data.get('gut')
     if new_gut:
         demand.gut = new_gut
@@ -40,7 +40,7 @@ def approve_level_1(id):
     db.session.add(history)
     db.session.commit()
     
-    # Trigger email
+    # Disparar e-mail
     config = AppConfig.query.first()
     if config and config.email_aprovador_2:
         print(f"[INFO] Demanda {demand.id} aprovada no nível 1")
@@ -69,7 +69,7 @@ def reject_level_1(id):
     db.session.add(history)
     db.session.commit()
     
-    # Trigger email to creator
+    # Disparar e-mail para o criador
     if demand.creator:
         print(f"[INFO] Demanda {demand.id} rejeitada no nível 1")
     
@@ -105,8 +105,8 @@ def approve_level_2(id):
     db.session.add(history)
     db.session.commit()
     
-    # Trigger email to executor (default or specific?)
-    # For now using default executor email from config
+    # Disparar e-mail para o executor (padrão ou específico?)
+    # Por enquanto usando e-mail do executor padrão da configuração
     config = AppConfig.query.first()
     if config and config.email_executor_default:
         print(f"[INFO] Demanda {demand.id} aprovada no nível 2")
@@ -135,7 +135,7 @@ def reject_level_2(id):
     db.session.add(history)
     db.session.commit()
     
-    # Trigger email to creator and approver 1 (optional, for now just creator)
+    # Disparar e-mail para o criador e aprovador 1 (opcional, por enquanto apenas criador)
     if demand.creator:
         print(f"[INFO] Demanda {demand.id} rejeitada no nível 2")
     

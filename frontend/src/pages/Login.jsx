@@ -27,7 +27,7 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex bg-surface-muted">
-            {/* Left Side - Branding/Image */}
+            {/* Lado Esquerdo - Marca/Imagem */}
             <div className="hidden lg:flex lg:w-1/2 bg-primary relative overflow-hidden items-center justify-center">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-hover to-primary opacity-90"></div>
                 <div className="relative z-10 text-white p-12 max-w-lg">
@@ -36,12 +36,12 @@ const Login = () => {
                         Gerencie ordens de serviço, aprovações e execuções. Manutenção e Produção
                     </p>
                 </div>
-                {/* Decorative Circles */}
+                {/* Círculos Decorativos */}
                 <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full translate-x-1/3 translate-y-1/3"></div>
             </div>
 
-            {/* Right Side - Login Form */}
+            {/* Lado Direito - Formulário de Login */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative">
                 <div className="w-full max-w-md">
                     <div className="bg-white p-10 rounded-2xl shadow-soft">
@@ -132,7 +132,7 @@ const Login = () => {
                     </p>
                 </div>
 
-                {/* Sign Up Modal */}
+                {/* Modal de Cadastro */}
                 {showSignUp && (
                     <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center p-8 z-20 rounded-2xl">
                         <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 max-w-sm w-full text-center relative">

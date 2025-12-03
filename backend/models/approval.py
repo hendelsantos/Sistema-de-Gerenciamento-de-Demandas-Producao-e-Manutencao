@@ -12,7 +12,7 @@ class Approval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     demand_id = db.Column(db.Integer, db.ForeignKey('demands.id'), nullable=False)
     aprovador_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    nivel = db.Column(db.Integer, nullable=False) # 1 or 2
+    nivel = db.Column(db.Integer, nullable=False) # 1 ou 2
     status = db.Column(db.Enum(ApprovalStatus), nullable=False)
     justificativa = db.Column(db.Text, nullable=True)
     data = db.Column(db.DateTime, default=datetime.utcnow)

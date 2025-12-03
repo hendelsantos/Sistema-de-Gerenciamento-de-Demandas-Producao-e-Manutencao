@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 admin_bp = Blueprint('admin', __name__)
 
-# TODO: Add admin role check decorator
+# TODO: Adicionar decorador de verificação de função de administrador
 
 @admin_bp.route('/users', methods=['GET'])
 @jwt_required()

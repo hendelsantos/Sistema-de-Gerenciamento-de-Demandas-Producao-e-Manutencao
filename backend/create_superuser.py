@@ -6,16 +6,16 @@ app = create_app()
 
 def create_superuser():
     with app.app_context():
-        # Check if user exists
+        # Verificar se o usuário existe
         user = User.query.filter_by(hmc='37100655').first()
         if user:
             print("Superuser already exists.")
             return
 
-        # Create superuser
+        # Criar superusuário
         superuser = User(
             nome='Hendel Santos',
-            email='hendel.santos@hyundai-brasil.com', # Assuming email based on request context or placeholder
+            email='hendel.santos@hyundai-brasil.com', # Assumindo e-mail com base no contexto da solicitação ou placeholder
             hmc='37100655',
             role=UserRole.ADMIN,
             ativo=True
