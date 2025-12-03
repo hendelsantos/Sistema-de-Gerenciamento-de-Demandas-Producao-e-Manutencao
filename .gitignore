@@ -25,3 +25,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Database
+*.db
+*.sqlite3
+backend/instance/

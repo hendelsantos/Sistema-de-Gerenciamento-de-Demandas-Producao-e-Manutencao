@@ -40,14 +40,31 @@ def create_user():
 
 @admin_bp.route('/users/<int:id>', methods=['PUT'])
 @jwt_required()
-def update_user_role(id):
+def update_user(id):
     user = User.query.get_or_404(id)
     data = request.get_json()
     
+    if 'nome' in data:
+        user.nome = data['nome']
+        
+    if 'email' in data and data['email'] != user.email:
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'message': 'Email already exists'}), 400
+        user.email = data['email']
+        
+    if 'hmc' in data and data['hmc'] != user.hmc:
+        if User.query.filter_by(hmc=data['hmc']).first():
+            return jsonify({'message': 'HMC already exists'}), 400
+        user.hmc = data['hmc']
+    
     if 'role' in data:
         user.role = UserRole(data['role'])
+        
     if 'ativo' in data:
         user.ativo = data['ativo']
+        
+    if 'password' in data and data['password']:
+        user.set_password(data['password'])
         
     db.session.commit()
     return jsonify(user.to_dict()), 200
