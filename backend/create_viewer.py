@@ -14,6 +14,7 @@ def create_viewer_user():
             user = User(
                 nome="Visualizador",
                 email=email,
+                hmc="00000000", # Dummy HMC for guest
                 role=UserRole.VISUALIZADOR
             )
             user.set_password("visualizador123") # Default password, though we will use ID-based login for guest

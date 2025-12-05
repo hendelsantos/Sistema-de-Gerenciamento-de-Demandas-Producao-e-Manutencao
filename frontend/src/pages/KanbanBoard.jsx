@@ -27,8 +27,8 @@ const KanbanColumn = ({ title, demands, statusColor, badgeColor }) => (
                                 </span>
                             )}
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${demand.gut >= 100 ? 'bg-red-50 text-red-700 border-red-100 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800' :
-                                    demand.gut >= 50 ? 'bg-yellow-50 text-yellow-700 border-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800' :
-                                        'bg-green-50 text-green-700 border-green-100 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'
+                                demand.gut >= 50 ? 'bg-yellow-50 text-yellow-700 border-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800' :
+                                    'bg-green-50 text-green-700 border-green-100 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'
                                 }`}>
                                 GUT: {demand.gut}
                             </span>
@@ -72,8 +72,13 @@ const KanbanBoard = () => {
 
     const fetchDemands = async () => {
         try {
-            const response = await api.get('/demands');
-            setDemands(response.data);
+            // Fetch more items for Kanban board to be useful
+            const response = await api.get('/demands?per_page=100');
+            if (response.data.demands) {
+                setDemands(response.data.demands);
+            } else {
+                setDemands(response.data);
+            }
         } catch (error) {
             console.error('Error fetching demands:', error);
         } finally {

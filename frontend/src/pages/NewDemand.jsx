@@ -1,9 +1,27 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const NewDemand = () => {
     const navigate = useNavigate();
+    const { user } = useAuth(); // Import useAuth
+
+    // Redirect guest users
+    if (user?.role === 'VISUALIZADOR') {
+        return (
+            <div className="p-8 text-center">
+                <h2 className="text-2xl font-bold text-red-600 mb-4">Acesso Negado</h2>
+                <p className="text-gray-600 mb-6">Usuários visualizadores não podem criar demandas.</p>
+                <button
+                    onClick={() => navigate('/')}
+                    className="px-4 py-2 bg-primary text-white rounded-lg"
+                >
+                    Voltar ao Dashboard
+                </button>
+            </div>
+        );
+    }
     const [formData, setFormData] = useState({
         titulo: '',
         problema: '',

@@ -10,7 +10,12 @@ const Dashboard = () => {
         const fetchDemands = async () => {
             try {
                 const response = await api.get('/demands');
-                setDemands(response.data);
+                // Backend now returns paginated response by default
+                if (response.data.demands) {
+                    setDemands(response.data.demands);
+                } else {
+                    setDemands(response.data);
+                }
             } catch (error) {
                 console.error('Failed to fetch demands', error);
             } finally {

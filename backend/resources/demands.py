@@ -1,96 +1,29 @@
 from flask import Blueprint, request, jsonify
-from extensions import db
-from models.demand import Demand, DemandStatus
-from models.photo import Photo
-from models.status_history import StatusHistory
-from models.config import AppConfig
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from datetime import datetime
+from services.demand_service import DemandService
+import logging
 
 demands_bp = Blueprint('demands', __name__)
+logger = logging.getLogger(__name__)
 
 @demands_bp.route('', methods=['POST'])
 @jwt_required()
 def create_demand():
-    print("[DEBUG] Starting create_demand")
-    
-    # Verificar se é uma requisição multipart (upload de arquivo)
-    if request.content_type and 'multipart/form-data' in request.content_type:
-        data = request.form
-        files = request.files.getlist('photos')
-        print(f"[DEBUG] Received multipart data: {data}")
-        print(f"[DEBUG] Received files: {[f.filename for f in files]}")
-    else:
-        data = request.get_json()
-        files = []
-        print(f"[DEBUG] Received json data: {data}")
-
-    current_user_id = int(get_jwt_identity())
-    print(f"[DEBUG] Current user ID: {current_user_id}")
-    
     try:
-        demand = Demand(
-            titulo=data.get('titulo'),
-            problema=data.get('problema'),
-            processo=data.get('processo'),
-            equipamento=data.get('equipamento'),
-            gut=int(data.get('gut', 1)),
-            created_by=current_user_id,
-            status=DemandStatus.PENDENTE_APROVACAO_1
-        )
-        print(f"[DEBUG] Demand object created: {demand.titulo}")
-        
-        db.session.add(demand)
-        db.session.flush() # Obter ID
-        print(f"[DEBUG] Demand flushed, ID: {demand.id}")
-        
-        # Adicionar histórico inicial
-        history = StatusHistory(
-            demand_id=demand.id,
-            status=DemandStatus.PENDENTE_APROVACAO_1
-        )
-        db.session.add(history)
-        
-        # Lidar com uploads de arquivos
-        import os
-        from werkzeug.utils import secure_filename
-        
-        UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
-        if not os.path.exists(UPLOAD_FOLDER):
-            os.makedirs(UPLOAD_FOLDER)
-            
-        for file in files:
-            if file and file.filename:
-                filename = secure_filename(file.filename)
-                # Adicionar timestamp ao nome do arquivo para evitar colisões
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                unique_filename = f"{timestamp}_{filename}"
-                file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
-                file.save(file_path)
-                
-                # Criar registro de Foto
-                # URL deve ser relativa à pasta static
-                photo_url = f"/static/uploads/{unique_filename}"
-                photo = Photo(demand_id=demand.id, filename=unique_filename, url=photo_url)
-                db.session.add(photo)
-                print(f"[DEBUG] Photo saved: {unique_filename}")
+        if request.content_type and 'multipart/form-data' in request.content_type:
+            data = request.form
+            files = request.files.getlist('photos')
+        else:
+            data = request.get_json()
+            files = []
 
-        # Lidar com URLs de fotos existentes (se houver via JSON)
-        if 'photos' in data and not files:
-             # Esta parte pode precisar de ajuste se quisermos suportar ambos, 
-             # mas por enquanto vamos assumir que fotos JSON são apenas URLs
-             # Se os dados forem do formulário, 'photos' pode ser a chave da lista de arquivos, tratada acima
-             pass
-
-        db.session.commit()
-        print("[DEBUG] Session committed successfully")
+        current_user_id = int(get_jwt_identity())
         
+        demand = DemandService.create_demand(data, files, current_user_id)
         return jsonify(demand.to_dict()), 201
+        
     except Exception as e:
-        print(f"[ERROR] Exception in create_demand: {type(e).__name__}: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        db.session.rollback()
+        logger.error(f"Controller error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @demands_bp.route('', methods=['GET'])
@@ -100,45 +33,24 @@ def get_demands():
     per_page = request.args.get('per_page', 10, type=int)
     status_filter = request.args.get('status')
     
-    query = Demand.query
+    result = DemandService.get_demands(page, per_page, status_filter)
     
-    if status_filter:
-        statuses = status_filter.split(',')
-        query = query.filter(Demand.status.in_(statuses))
-        
-    demands = query.order_by(Demand.data_criacao.desc()).all()
-    demands_list = [d.to_dict() for d in demands]
-    
-    if request.args.get('page'):
-        start = (page - 1) * per_page
-        end = start + per_page
-        paginated_items = demands_list[start:end]
-        
-        return jsonify({
-            'demands': paginated_items,
-            'total': len(demands_list),
-            'pages': (len(demands_list) + per_page - 1) // per_page,
-            'current_page': page
-        }), 200
-        
-    return jsonify(demands_list), 200
+    return jsonify({
+        'demands': result['items'],
+        'total': result['total'],
+        'pages': result['pages'],
+        'current_page': result['current_page']
+    }), 200
 
 @demands_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_demand(id):
-    demand = Demand.query.get_or_404(id)
+    demand = DemandService.get_demand_by_id(id)
     return jsonify(demand.to_dict()), 200
 
 @demands_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_demand(id):
-    demand = Demand.query.get_or_404(id)
     data = request.get_json()
-    
-    # Permitir atualizações apenas se ainda não aprovado? Ou admin?
-    # Por enquanto, atualização básica
-    if 'titulo' in data: demand.titulo = data['titulo']
-    if 'problema' in data: demand.problema = data['problema']
-    
-    db.session.commit()
+    demand = DemandService.update_demand(id, data)
     return jsonify(demand.to_dict()), 200

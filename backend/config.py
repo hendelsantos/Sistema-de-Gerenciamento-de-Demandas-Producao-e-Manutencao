@@ -13,6 +13,9 @@ class Config:
     # Redis
     REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
     
+    # Uploads
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
+    
     # E-mail
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))

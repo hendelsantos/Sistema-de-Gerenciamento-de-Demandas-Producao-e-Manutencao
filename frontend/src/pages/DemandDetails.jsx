@@ -56,10 +56,10 @@ const DemandDetails = () => {
     if (loading) return <div className="p-6">Carregando...</div>;
     if (!demand) return <div className="p-6">Demanda não encontrada.</div>;
 
-    const canApprove1 = (user.role === 'APROVADOR_1' || user.role === 'ADMIN') && demand.status === 'pendente_aprovacao_1';
-    const canApprove2 = (user.role === 'APROVADOR_2' || user.role === 'ADMIN') && demand.status === 'pendente_aprovacao_2';
-    const canStartExecution = (user.role === 'EXECUTOR' || user.role === 'ADMIN') && demand.status === 'aguardando_execucao';
-    const canFinishExecution = (user.role === 'EXECUTOR' || user.role === 'ADMIN') && demand.status === 'executando';
+    const canApprove1 = (user.role === 'APROVADOR_1' || user.role === 'ADMIN') && demand.status === 'pendente_aprovacao_1' && user.role !== 'VISUALIZADOR';
+    const canApprove2 = (user.role === 'APROVADOR_2' || user.role === 'ADMIN') && demand.status === 'pendente_aprovacao_2' && user.role !== 'VISUALIZADOR';
+    const canStartExecution = (user.role === 'EXECUTOR' || user.role === 'ADMIN') && demand.status === 'aguardando_execucao' && user.role !== 'VISUALIZADOR';
+    const canFinishExecution = (user.role === 'EXECUTOR' || user.role === 'ADMIN') && demand.status === 'executando' && user.role !== 'VISUALIZADOR';
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
